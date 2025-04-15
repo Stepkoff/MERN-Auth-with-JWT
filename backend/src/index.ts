@@ -5,6 +5,7 @@ import {APP_ORIGIN, NODE_ENV, PORT} from './constants/env';
 import cors from 'cors';
 import cookieParser from "cookie-parser";
 import {errorHandler} from './middleware/errorHandler';
+import {catchErrors} from './utils/catchErrors';
 
 const app = express();
 
@@ -21,13 +22,13 @@ app.use(
     cookieParser()
 );
 
-app.get("/", (req, res) => {
-    throw new Error("Test error")
-    res.status(200).json({
-        status: "healthy"
-    })
-
-});
+//@ts-ignore
+app.get("/", (req, res, next) => {
+        return res.status(200).json({
+            status: "healthy"
+        })
+    }
+);
 
 app.use(errorHandler)
 
