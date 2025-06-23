@@ -72,6 +72,14 @@ export function LoginForm({
                                     <FormMessage/>
                                 </FormItem>
                             )} />
+                            <div className="text-end text-sm">
+                            <Link
+                                to={'/resetPassword'}
+                                className="underline underline-offset-4"
+                            >
+                                Forgot password?
+                            </Link>
+                            </div>
                             <div className="flex flex-col gap-3">
                                 <Button className="w-full cursor-pointer" type='submit'>
                                     Login
