@@ -8,7 +8,7 @@ import {
     CardTitle,
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import * as React from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { loginValidation } from '@/lib/validators';
 import { useForm } from 'react-hook-form';
@@ -26,15 +26,14 @@ export function LoginForm({
         defaultValues: {
             password: '',
             email: '',
-        }
-        
+        },
+        mode: 'onChange'
     });
 
     const handleSubmit = (values: z.infer<typeof loginValidation>) => {
         console.log('values', values);
     };
 
-    
     return (
         <div className={cn('flex flex-col gap-6', className)} {...props}>
             <Card>
@@ -73,7 +72,7 @@ export function LoginForm({
                                                 {...field}
                                                 id="password"
                                                 type="password"
-                                                placeholder="password"
+                                                placeholder="********"
                                             />
                                         </FormControl>
                                         <FormMessage/>
