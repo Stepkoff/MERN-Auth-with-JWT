@@ -8,14 +8,33 @@ import {
     CardTitle,
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import * as React from 'react';
 import { Link } from 'react-router-dom';
+import { loginValidation } from '@/lib/validators';
+import { useForm } from 'react-hook-form';
+import z from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from './ui/form';
 
 export function LoginForm({
     className,
     ...props
 }: React.ComponentProps<'div'>) {
+
+    const form = useForm<z.infer<typeof loginValidation>>({
+        resolver: zodResolver(loginValidation),
+        defaultValues: {
+            password: '',
+            email: '',
+        }
+        
+    });
+
+    const handleSubmit = (values: z.infer<typeof loginValidation>) => {
+        console.log('values', values);
+    };
+
+    
     return (
         <div className={cn('flex flex-col gap-6', className)} {...props}>
             <Card>
@@ -26,31 +45,43 @@ export function LoginForm({
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <form>
+                    <Form {...form}>
+                    <form onSubmit={form.handleSubmit(handleSubmit)}>
                         <div className="flex flex-col gap-6">
                             <div className="grid gap-3">
-                                <Label htmlFor="email">Email</Label>
-                                <Input
-                                    id="email"
-                                    type="email"
-                                    placeholder="m@example.com"
-                                    required
-                                />
+                                <FormField control={form.control} name='email' render={({field}) => (
+                                    <FormItem>
+                                        <FormLabel>Email</FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                {...field}
+                                                id="email"
+                                                type="email"
+                                                placeholder="m@example.com"
+                                            />
+                                        </FormControl>
+                                        <FormMessage/>
+                                    </FormItem>
+                                )} />
                             </div>
                             <div className="grid gap-3">
-                                <div className="flex items-center">
-                                    <Label htmlFor="password">Password</Label>
-                                    <a
-                                        href="#"
-                                        className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
-                                    >
-                                        Forgot your password?
-                                    </a>
-                                </div>
-                                <Input id="password" type="password" required />
+                                <FormField control={form.control} name='password' render={({field}) => (
+                                    <FormItem>
+                                        <FormLabel>Password</FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                {...field}
+                                                id="password"
+                                                type="password"
+                                                placeholder="password"
+                                            />
+                                        </FormControl>
+                                        <FormMessage/>
+                                    </FormItem>
+                                )} />
                             </div>
                             <div className="flex flex-col gap-3">
-                                <Button type="submit" className="w-full">
+                                <Button className="w-full cursor-pointer" type='submit'>
                                     Login
                                 </Button>
                             </div>
@@ -64,7 +95,9 @@ export function LoginForm({
                                 Sign up
                             </Link>
                         </div>
+                        
                     </form>
+                    </Form>
                 </CardContent>
             </Card>
         </div>
