@@ -8,14 +8,35 @@ import {
     CardTitle,
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import * as React from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
+import { RegisterValidation } from '@/lib/validators';
+import {useForm} from 'react-hook-form';
+import z from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from './ui/form';
+
 
 export function RegisterForm({
     className,
     ...props
 }: React.ComponentProps<'div'>) {
+    const form = useForm<z.infer<typeof RegisterValidation>>({
+        resolver: zodResolver(RegisterValidation),
+        defaultValues: {
+            username: '',
+            email: '',
+            password: '',
+            confirmPassword: ''
+        },
+        mode: 'onSubmit'
+    });
+
+    const handleSubmit = (values: z.infer<typeof RegisterValidation>) => {
+        console.log('values', values);
+        form.reset();
+    };
+
     return (
         <div className={cn('flex flex-col gap-6', className)} {...props}>
             <Card>
@@ -26,23 +47,60 @@ export function RegisterForm({
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <form>
-                        <div className="flex flex-col gap-6">
-                            <div className="grid gap-3">
-                                <Label htmlFor="email">Email</Label>
-                                <Input
-                                    id="email"
-                                    type="email"
-                                    placeholder="m@example.com"
-                                    required
-                                />
-                            </div>
-                            <div className="grid gap-3">
-                                <div className="flex items-center">
-                                    <Label htmlFor="password">Password</Label>
-                                </div>
-                                <Input id="password" type="password" required />
-                            </div>
+                    <Form {...form}>
+                    <form onSubmit={form.handleSubmit(handleSubmit)}>
+                        <div className="flex flex-col gap-4">
+                            <FormField control={form.control} name='username' render={({field}) => (
+                                <FormItem>
+                                    <FormLabel>Username</FormLabel>
+                                    <FormControl>
+                                        <Input
+                                            {...field}
+                                            placeholder="ReanuKeeves"
+                                        />
+                                    </FormControl>
+                                    <FormMessage/>
+                                </FormItem>
+                            )}/>
+                            <FormField control={form.control} name='email' render={({field}) => (
+                                <FormItem>
+                                    <FormLabel>Email</FormLabel>
+                                    <FormControl>
+                                        <Input
+                                            {...field}
+                                            placeholder="mail@example.com"
+                                        />
+                                    </FormControl>
+                                    <FormMessage/>
+                                </FormItem>
+                            )}/>
+                            <FormField control={form.control} name='password' render={({field}) => (
+                                <FormItem>
+                                    <FormLabel>Password</FormLabel>
+                                    <FormControl>
+                                        <Input
+                                            {...field}
+                                            type='password'
+                                            placeholder="********"
+                                        />
+                                    </FormControl>
+                                    <FormMessage/>
+                                </FormItem>
+                            )}/>
+                            <FormField control={form.control} name='confirmPassword' render={({field}) => (
+                                <FormItem>
+                                    <FormLabel>Confirm password</FormLabel>
+                                    <FormControl>
+                                        <Input
+                                             {...field}
+                                            type='password'
+                                            placeholder="********"
+                                        />
+                                    </FormControl>
+                                    <FormMessage/>
+                                </FormItem>
+                            )}/>
+
                             <div className="flex flex-col gap-3">
                                 <Button type="submit" className="w-full">
                                     Login
@@ -59,6 +117,7 @@ export function RegisterForm({
                             </Link>
                         </div>
                     </form>
+                    </Form>
                 </CardContent>
             </Card>
         </div>

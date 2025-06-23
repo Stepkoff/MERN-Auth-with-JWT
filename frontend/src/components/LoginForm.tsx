@@ -32,6 +32,7 @@ export function LoginForm({
 
     const handleSubmit = (values: z.infer<typeof loginValidation>) => {
         console.log('values', values);
+        form.reset();
     };
 
     return (
@@ -46,39 +47,31 @@ export function LoginForm({
                 <CardContent>
                     <Form {...form}>
                     <form onSubmit={form.handleSubmit(handleSubmit)}>
-                        <div className="flex flex-col gap-6">
-                            <div className="grid gap-3">
-                                <FormField control={form.control} name='email' render={({field}) => (
-                                    <FormItem>
-                                        <FormLabel>Email</FormLabel>
-                                        <FormControl>
-                                            <Input
-                                                {...field}
-                                                id="email"
-                                                type="email"
-                                                placeholder="m@example.com"
-                                            />
-                                        </FormControl>
-                                        <FormMessage/>
-                                    </FormItem>
-                                )} />
-                            </div>
-                            <div className="grid gap-3">
-                                <FormField control={form.control} name='password' render={({field}) => (
-                                    <FormItem>
-                                        <FormLabel>Password</FormLabel>
-                                        <FormControl>
-                                            <Input
-                                                {...field}
-                                                id="password"
-                                                type="password"
-                                                placeholder="********"
-                                            />
-                                        </FormControl>
-                                        <FormMessage/>
-                                    </FormItem>
-                                )} />
-                            </div>
+                        <div className="flex flex-col gap-4">
+                            <FormField control={form.control} name='email' render={({field}) => (
+                                <FormItem>
+                                    <FormLabel>Email</FormLabel>
+                                    <FormControl>
+                                        <Input
+                                            {...field}
+                                            placeholder="mail@example.com"
+                                        />
+                                    </FormControl>
+                                    <FormMessage/>
+                                </FormItem>
+                            )} />
+                            <FormField control={form.control} name='password' render={({field}) => (
+                                <FormItem>
+                                    <FormLabel>Password</FormLabel>
+                                    <FormControl>
+                                        <Input
+                                            {...field}
+                                            placeholder="********"
+                                        />
+                                    </FormControl>
+                                    <FormMessage/>
+                                </FormItem>
+                            )} />
                             <div className="flex flex-col gap-3">
                                 <Button className="w-full cursor-pointer" type='submit'>
                                     Login
